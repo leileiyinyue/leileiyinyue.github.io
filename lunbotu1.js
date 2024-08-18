@@ -7,7 +7,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Mysterious Lights.mp3", "The Range.mp3", "Epic Boss Battle.mp3", "Kings Trailer.mp3", "Epic Blockbuster 2.mp3", "Night Attack.mp3", "Big Eyes.mp3", "Video Game Blockbuster.mp3" ];
+			var vlist = ["Mysterious Lights.mp3", "The Range.mp3", "Epic Boss Battle.mp3", "Kings Trailer.mp3",  "Night Attack.mp3", "Big Eyes.mp3", "Video Game Blockbuster.mp3" ];
 				var k = 0;
 			
 			//点击切换到下一个资源
