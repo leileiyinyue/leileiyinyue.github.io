@@ -6,7 +6,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Mp3/一曲红尘.mp3", "Mp3/缘分惹得祸.mp3", "Mp3/回忆里的那个人.mp3", "Mp3/伤了心的女人怎么了.mp3", "Mp3/伤感男人的心谁懂.mp3", "Mp3/迷茫的爱.mp3", "Mp3/你到底在哪里.mp3", "Mp3/又是细雨.mp3", "Mp3/心上人.mp3", "Mp3/晚风.mp3", "Mp3/今夜雨蒙蒙.mp3", "Mp3/骑上骏马回草原.mp3","Mp3/火火的姑娘.mp3","Mp3/醉后的心碎.mp3","Mp3/好了伤疤忘了疼.mp3","Mp3/敖包相恋.mp3" ];
+			var vlist = ["Strength of the Titans.mp3", "New Hero in Town.mp3", "Gothamlicious.mp3", "The Ice Giants.mp3", "Honor Bound.mp3", "Release the Hybrids.mp3", "Battle Ready.mp3", "And Just Like That.mp3" ];
 				var k = 0;
 			
 			//点击切换到下一个资源
