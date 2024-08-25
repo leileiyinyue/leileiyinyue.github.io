@@ -28,8 +28,8 @@
 	position: absolute;
 	right: 165px;
 	top: 0;
-	width: 65px;
-	height: 65px;
+	width: 55px;
+	height: 55px;
 	
 	animation:  big 2s linear infinite alternate,move 2s infinite linear alternate; 
 }
