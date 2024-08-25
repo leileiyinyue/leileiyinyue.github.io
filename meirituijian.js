@@ -6,7 +6,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["The Celebrated Minuet for Piano.mp3", "The Celebrated Minuet (1).mp3", "Aquarium.mp3", "今天.mp3", "Brandenburg Concerto III, Allegro I.mp3", "Mana Two - Part 3.mp3", "Blippy Trance .mp3", "Soundtrack From the Starcourt Mall.mp3", "I Guess What I'm Trying to Say.mp3"];
+			var vlist = ["The Celebrated Minuet for Piano.mp3", "The Celebrated Minuet (1).mp3", "Aquarium.mp3", "Brandenburg Concerto III, Allegro I.mp3", "Mana Two - Part 3.mp3", "Blippy Trance .mp3", "Soundtrack From the Starcourt Mall.mp3", "I Guess What I'm Trying to Say.mp3"];
 				var k = 0;
 			
 			//点击切换到下一个资源
