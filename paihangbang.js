@@ -6,7 +6,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Mp3/百花香.mp3", "Mp3/鬼迷心窍.mp3", "Mp3/花开的时候你就来看我.mp3", "Mp3/快乐崇拜.mp3", "Mp3/来生缘.mp3", "Mp3/凉凉.mp3", "Mp3/你莫走.mp3", "Mp3/女儿情.mp3", "Mp3/踏山河.mp3", "Mp3/谢谢你的爱.mp3", "Mp3/新贵妃醉酒.mp3", "Mp3/夜之光.mp3","Mp3/一曲相思.mp3","Mp3/雨花石.mp3" ];
+			var vlist = ["Downtown Boogie.mp3", "Groovin.mp3", "Dancing at the Inn.mp3", "Royal Coupling.mp3", "Trip Up North.mp3", "Jethro on the Run.mp3", "Spec Ops.mp3", "Burning Trapezoid of Fire.mp3" ];
 				var k = 0;
 			
 			//点击切换到下一个资源
