@@ -6,7 +6,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Arpent.mp3", "Sciencenet Theme.mp3", "Gotta Keep On Movin.mp3", "Murder On The Bayou.mp3", "Sun Up Gunned Down.mp3", "Ambush in Rattlesnake Gulch.mp3", "Goodnightmare.mp3", "Arpent.mp3" ];
+			var vlist = ["Improved Ice Cream Truck.mp3", "Sciencenet Theme.mp3", "Gotta Keep On Movin.mp3", "Murder On The Bayou.mp3", "Sun Up Gunned Down.mp3", "Ambush in Rattlesnake Gulch.mp3", "Goodnightmare.mp3", "Arpent.mp3" ];
 				var k = 0;
 			
 			//点击切换到下一个资源
