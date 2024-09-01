@@ -5,7 +5,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["梦的传说.mp3", "梦中的婚礼.mp3", "梦中的鸟.mp3", "秘密的庭院.mp3", "命运.mp3", "拿达的主题.mp3" ];
+			var vlist = ["Cumbish.mp3", "Hillbilly Swing.mp3", "Bollywood Groove.mp3", "Windy Old Weather.mp3", "Village Tarantella.mp3", "Forest Frolic Loop.mp3" ];
 			var k = 0;
 			
 			//点击切换到下一个资源
