@@ -2,7 +2,7 @@
 			var vid = document.getElementById("vd");
            
 			//       音频循环播放列表
-			var vlist = ["Adventure.mp3", "Shenzhen Nightlife.mp3", "Eye of Forgiveness.mp3", "Driving Concern.mp3", "Desert Fox .mp3", "Backbeat.mp3", "The Celebrated Minuet for Piano.mp3", "I Guess What I'm Trying to Say.mp3", "Soundtrack From the Starcourt Mall.mp3", "Blippy Trance.mp3", "Mana Two - Part 3.mp3", "Brandenburg Concerto III, Allegro I.mp3"];
+			var vlist = ["Adventure.mp3", "Shenzhen Nightlife.mp3", "Eye of Forgiveness.mp3", "Driving Concern.mp3", "Desert Fox .mp3", "Backbeat.mp3", "The Celebrated Minuet for Piano.mp3", "I Guess What I'm Trying to Say.mp3", "Soundtrack From the Starcourt Mall.mp3", "Blippy Trance.mp3", "Mana Two - Part 3.mp3"];
 			var k = 0;
 			
 			//点击切换到下一个资源
