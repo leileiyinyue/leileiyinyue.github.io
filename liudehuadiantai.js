@@ -5,7 +5,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Adventure.mp3", "不死的梦.mp3", "风雨依然.mp3", "Mp3/记不住你的容颜.mp3", "Mp3/可不可以.mp3", "Mp3/来生缘.mp3", "Mp3/浪子心声.mp3", "Mp3/练习.mp3", "Mp3/你说他是你想嫁的人.mp3", "Mp3/亲爱的小孩.mp3", "Mp3/如果你是我的传说.mp3", "Mp3/谢谢你的爱.mp3","Mp3/一起走过的日子.mp3", "Mp3/缘尽.mp3", "Mp3/在我的胸前安歇.mp3" ];
+			var vlist = ["Adventure.mp3", "Shenzhen Nightlife.mp3", "Eye of Forgiveness.mp3", "Driving Concern.mp3", "Desert Fox .mp3", "Backbeat.mp3", "The Celebrated Minuet for Piano.mp3", "I Guess What I'm Trying to Say.mp3", "Soundtrack From the Starcourt Mall.mp3", "Blippy Trance.mp3", "Mana Two - Part 3.mp3", "Brandenburg Concerto III, Allegro I.mp3"];
 			var k = 0;
 			
 			//点击切换到下一个资源
