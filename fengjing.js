@@ -5,7 +5,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Mp3/唉声叹气.mp3", "Mp3/爱的挽歌.mp3", "Mp3/高山低谷.mp3", "Mp3/理想对象.mp3", "Mp3/终身美丽.mp3"];
+			var vlist = ["Barroom Ballet.mp3", "Fright Night Twist.mp3", "My Giant Bunny Friend.mp3", "Going Bananas.mp3", "Wakka Wakka.mp3"];
 			var k = 0;
 			
 			//点击切换到下一个资源
