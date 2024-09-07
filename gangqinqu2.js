@@ -5,7 +5,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Silly Boy.mp3", "Monsters in Hotel.mp3", "Barnville.mp3", "Llama in Pajama.mp3", "Horns.MP3", "The Entertainer.mp3"];
+			var vlist = ["Silly Boy.mp3", "Monsters in Hotel.mp3", "Barnville.mp3", "Llama in Pajama.mp3", "Horns.mp3", "The Entertainer.mp3"];
 			var k = 0;
 			
 			//点击切换到下一个资源
