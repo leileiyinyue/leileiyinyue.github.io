@@ -5,7 +5,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Ukulele Song.mp3", "The Celebrated Minuet.mp3", "Still Pickin.mp3", "Stereotype News.mp3", "Motions.mp3", "Limit 70.mp3" ];
+			var vlist = ["Ukulele Song.mp3", "The Celebrated Minuet.mp3", "Still Pickin.mp3", "Stereotype News.mp3", "Motions.mp3", "Limit 70.mp3", "Landra's Dream.mp3", "Inspiration.mp3", "Happy Whistling Ukulele.mp3", "Advertime.mp3" ];
 			var k = 0;
 			
 			//点击切换到下一个资源
