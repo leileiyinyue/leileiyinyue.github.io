@@ -5,7 +5,7 @@
             	vid.play()
             }
 			//       音频循环播放列表
-			var vlist = ["Mp3/梦的传说.mp3", "Mp3/梦中的婚礼.mp3", "Mp3/梦中的鸟.mp3", "Mp3/秘密的庭院.mp3", "Mp3/命运.mp3", "Mp3/拿达的主题.mp3", "Mp3/秋日私语.mP3", "Mp3/柔和彩虹.mp3", "Mp3/伤感乐曲.mp3" ];
+			var vlist = ["Ukulele Song.mp3", "The Celebrated Minuet.mp3", "Still Pickin.mp3", "Stereotype News.mp3", "Motions.mp3", "Limit 70.mp3" ];
 			var k = 0;
 			
 			//点击切换到下一个资源
