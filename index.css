@@ -94,6 +94,7 @@ div {
 .search img {
 	width: 15px;
 	height: 15px;
+	vertical-align:middle;
 }
 /*.search::before {
 	content: "";
@@ -216,3 +217,4 @@ nav {
 #app{
 	height: 1888px;
 }
+
