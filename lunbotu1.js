@@ -1,14 +1,7 @@
 
 			//获取视频对象
 			var vid = document.getElementById("vd");
-             //黑屏时继续播放
-              document.addEventListener('visibilitychange', () => {
-      if (document.hidden &&!vid.paused) {
-        // 页面隐藏且音频正在播放时，不执行暂停操作，保持播放
-      } else if (!document.hidden && vid.paused) {
-        vid.play();
-      }
-    });                                   
+                               
             var vplay = document.getElementById("btn")
             vplay.onclick = function(){
             	vid.play()
@@ -47,5 +40,6 @@
 				vid.src = vlist[k];
 				vid.play();
 			}
+
 
 
