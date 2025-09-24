@@ -65,6 +65,7 @@ div {
 	position: fixed;
 	top: 0;
 	left: 50%;
+	z-index:99;
 	/*固定的盒子应该有宽度*/
 	-webkit-transform: translateX(-50%);
 	transform: translateX(-50%);
@@ -217,4 +218,5 @@ nav {
 #app{
 	height: 1888px;
 }
+
 
