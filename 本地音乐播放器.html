@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简单音乐播放器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    .player {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      margin: 0 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #playPauseBtn {
+      background-color: #2196F3;
+    }
+
+    #playPauseBtn:hover {
+      background-color: #0b7dda;
+    }
+
+    .song-info {
+      margin: 15px 0;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #ddd;
+      height: 5px;
+      border-radius: 5px;
+      margin: 15px 0;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: #4CAF50;
+      border-radius: 5px;
+      width: 0%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="player">
+    <h2>简单音乐播放器</h2>
+    <div class="song-info">
+      <div id="songTitle">未选择歌曲</div>
+      <div id="songTime">00:00 / 00:00</div>
+    </div>
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="controls">
+      <button id="prevBtn">上一首</button>
+      <button id="playPauseBtn">播放</button>
+      <button id="nextBtn">下一首</button>
+    </div>
+    <input type="file" id="fileInput" accept="audio/*" multiple style="display: none;">
+    <button onclick="document.getElementById('fileInput').click()">添加音乐</button>
+  </div>
+
+  <script>
+    const audioPlayer = new Audio();
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const songTitle = document.getElementById('songTitle');
+    const songTime = document.getElementById('songTime');
+    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+    const fileInput = document.getElementById('fileInput');
+
+    let songs = [];
+    let currentSongIndex = 0;
+    let isPlaying = false;
+
+    // 添加音乐文件
+    fileInput.addEventListener('change', function (e) {
+      const files = Array.from(e.target.files);
+      if (files.length > 0) {
+        songs = files;
+        currentSongIndex = 0;
+        loadSong(songs[currentSongIndex]);
+        if (isPlaying) {
+          audioPlayer.play();
+        }
+      }
+    });
+
+    // 加载歌曲
+    function loadSong(song) {
+      const objectURL = URL.createObjectURL(song);
+      audioPlayer.src = objectURL;
+      songTitle.textContent = song.name.replace(/\.[^/.]+$/, ""); // 移除文件扩展名
+      updateTime();
+    }
+
+    // 播放/暂停
+    function togglePlayPause() {
+      if (songs.length === 0) return;
+
+      if (isPlaying) {
+        audioPlayer.pause();
+        playPauseBtn.textContent = '播放';
+      } else {
+        audioPlayer.play();
+        playPauseBtn.textContent = '暂停';
+      }
+      isPlaying = !isPlaying;
+    }
+
+    // 上一首
+    function prevSong() {
+      if (songs.length === 0) return;
+
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      loadSong(songs[currentSongIndex]);
+      if (isPlaying) {
+        audioPlayer.play();
+      }
+    }
+
+    // 下一首
+    function nextSong() {
+      if (songs.length === 0) return;
+
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      loadSong(songs[currentSongIndex]);
+      if (isPlaying) {
+        audioPlayer.play();
+      }
+    }
+
+    // 更新进度条和时间显示
+    function updateTime() {
+      const currentTime = formatTime(audioPlayer.currentTime);
+      const duration = formatTime(audioPlayer.duration);
+      songTime.textContent = `${currentTime} / ${duration}`;
+
+      const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+    }
+
+    // 格式化时间 (秒 -> MM:SS)
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '00:00';
+
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // 点击进度条跳转
+    function setProgress(e) {
+      const width = this.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audioPlayer.duration;
+      audioPlayer.currentTime = (clickX / width) * duration;
+    }
+
+    // 事件监听
+    playPauseBtn.addEventListener('click', togglePlayPause);
+    prevBtn.addEventListener('click', prevSong);
+    nextBtn.addEventListener('click', nextSong);
+    audioPlayer.addEventListener('timeupdate', updateTime);
+    audioPlayer.addEventListener('ended', nextSong);
+    progressContainer.addEventListener('click', setProgress);
+  </script>
+</body>
+
+</html>
