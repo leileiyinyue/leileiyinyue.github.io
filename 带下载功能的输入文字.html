@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<title></title>
+<title>文字拼接图片下载</title>
 <style>
   * {
     margin: 0;
@@ -31,18 +31,23 @@
   }
   .word-show-box {
     margin-top: 20px;
+    /* 关键修复：允许横向滚动 + 不裁剪内容 */
     display: flex;
     gap: 0;
     padding: 0;
     background: #fff;
-    min-height: 80px;
+    min-height: 200px; /* 匹配图片高度 */
+    overflow-x: auto; /* 页面上可以滚动查看 */
+    overflow-y: hidden;
   }
   .word-img {
-    width: 60px;
-    height: 60px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     display: block;
     border: 0;
+    /* 关键：防止图片被压缩 */
+    flex-shrink: 0;
   }
   .empty-tip {
     color: #999;
@@ -79,10 +84,10 @@
 <script>
 // 本地图/网络图 随便切换都能用
 const wordData = [
-  { char: "清", img: "1.png" },
-  { char: "明", img: "2.png" },
-  { char: "节", img: "3.png" },
-  { char: "智", img: "4.png" },
+  { char: "清", img: "https://picsum.photos/100/100?random=1" },
+  { char: "明", img: "https://picsum.photos/100/100?random=2" },
+  { char: "节", img: "https://picsum.photos/100/100?random=3" },
+  { char: "智", img: "https://picsum.photos/100/100?random=4" },
 ];
 
 const input = document.getElementById('searchInput');
@@ -116,15 +121,27 @@ function renderImg(text){
 
 downBtn.addEventListener('click', function(){
   let fileName = input.value || "文字组合图";
-  html2canvas(box, {
+  
+  // 克隆一个无宽度限制的容器给 html2canvas 截取
+  const cloneBox = box.cloneNode(true);
+  cloneBox.style.width = 'auto';
+  cloneBox.style.overflow = 'visible';
+  cloneBox.style.position = 'absolute';
+  cloneBox.style.left = '-9999px';
+  document.body.appendChild(cloneBox);
+
+  html2canvas(cloneBox, {
     useCORS: true,
     allowTaint: false,
-    backgroundColor: null
+    backgroundColor: null,
+    scale: 2 // 提高下载图片清晰度
   }).then(canvas=>{
     let a = document.createElement('a');
     a.href = canvas.toDataURL('image/png');
     a.download = fileName + ".png";
     a.click();
+    // 截图完移除克隆节点
+    document.body.removeChild(cloneBox);
   })
 })
 
