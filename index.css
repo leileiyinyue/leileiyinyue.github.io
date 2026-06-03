@@ -2,7 +2,7 @@ body {
 	max-width: 540px;
 	min-width: 320px;
 	margin:0 auto;
-	font: normal 14px/1.5 Tahoma,"Lucida Grande",verdana, "Microsoft Yahei",STXihei,hei;
+	font: normal 14px/1.5 "Roboto", "Alibaba PuHuiTi", "Source Han Sans CN", "Noto Sans SC", sans-serif;
 	color: #000;
 	background: #f2f2f2;
 	overflow-x: hidden;
