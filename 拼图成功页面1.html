@@ -391,38 +391,69 @@ nextBtn.onclick = () => {
     play();
 };
 
-// 红包拖拽逻辑
-let isDrag = false, hasMoved = false, startX, startY;
-dragBox.addEventListener('mousedown', e => { startX = e.clientX; startY = e.clientY; isDrag = hasMoved = false; });
-dragBox.addEventListener('touchstart', e => { const t=e.touches[0]; startX=t.clientX; startY=t.clientY; isDrag=hasMoved=false; }, {passive:true});
+// 红包拖拽逻辑（无吸附，仅允许小部分拖出屏幕）
+let isDrag = false, hasMoved = false, startX, startY, boxStartLeft, boxStartTop;
+dragBox.addEventListener('mousedown', e => {
+    startX = e.clientX;
+    startY = e.clientY;
+    boxStartLeft = dragBox.offsetLeft;
+    boxStartTop = dragBox.offsetTop;
+    isDrag = hasMoved = false;
+});
+dragBox.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    boxStartLeft = dragBox.offsetLeft;
+    boxStartTop = dragBox.offsetTop;
+    isDrag = hasMoved = false;
+}, { passive: true });
+
+document.addEventListener('mousemove', e => {
+    if (e.buttons !== 1 || !isDrag) return;
+    const moveX = e.clientX - startX;
+    const moveY = e.clientY - startY;
+    let L = boxStartLeft + moveX;
+    let T = boxStartTop + moveY;
+    const boxW = dragBox.offsetWidth;
+    const boxH = dragBox.offsetHeight;
+    L = Math.max(-boxW * 0.3, Math.min(L, window.innerWidth - boxW * 0.7));
+    T = Math.max(-boxH * 0.3, Math.min(T, window.innerHeight - boxH * 0.7));
+    dragBox.style.left = L + 'px';
+    dragBox.style.top = T + 'px';
+});
+document.addEventListener('touchmove', e => {
+    if (!isDrag) return;
+    const t = e.touches[0];
+    const moveX = t.clientX - startX;
+    const moveY = t.clientY - startY;
+    let L = boxStartLeft + moveX;
+    let T = boxStartTop + moveY;
+    const boxW = dragBox.offsetWidth;
+    const boxH = dragBox.offsetHeight;
+    L = Math.max(-boxW * 0.3, Math.min(L, window.innerWidth - boxW * 0.7));
+    T = Math.max(-boxH * 0.3, Math.min(T, window.innerHeight - boxH * 0.7));
+    dragBox.style.left = L + 'px';
+    dragBox.style.top = T + 'px';
+    e.preventDefault();
+}, { passive: false });
 
 document.addEventListener('mousemove', e => {
     if (e.buttons !== 1) return;
-    if (Math.abs(e.clientX-startX)>5 || Math.abs(e.clientY-startY)>5) {
+    if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
         hasMoved = isDrag = true;
-        let L = e.clientX - dragBox.offsetWidth/2;
-        let T = e.clientY - dragBox.offsetHeight/2;
-        L = Math.max(0, Math.min(L, window.innerWidth - dragBox.offsetWidth));
-        T = Math.max(0, Math.min(T, window.innerHeight - dragBox.offsetHeight));
-        dragBox.style.left = L+'px'; dragBox.style.top = T+'px';
     }
 });
 document.addEventListener('touchmove', e => {
-    const t=e.touches[0];
-    if (Math.abs(t.clientX-startX)>5 || Math.abs(t.clientY-startY)>5) {
+    const t = e.touches[0];
+    if (Math.abs(t.clientX - startX) > 5 || Math.abs(t.clientY - startY) > 5) {
         hasMoved = isDrag = true;
-        let L = t.clientX - dragBox.offsetWidth/2;
-        let T = t.clientY - dragBox.offsetHeight/2;
-        L = Math.max(0, Math.min(L, window.innerWidth - dragBox.offsetWidth));
-        T = Math.max(0, Math.min(T, window.innerHeight - dragBox.offsetHeight));
-        dragBox.style.left = L+'px'; dragBox.style.top = T+'px';
     }
-}, {passive:false});
+}, { passive: true });
 
-document.addEventListener('mouseup', () => { setTimeout(()=>isDrag=false,50); });
-document.addEventListener('touchend', () => { setTimeout(()=>isDrag=false,50); });
+document.addEventListener('mouseup', () => { setTimeout(() => isDrag = false, 50); });
+document.addEventListener('touchend', () => { setTimeout(() => isDrag = false, 50); });
 
-// 点击红包新开独立页面，不关闭播放页
 dragBox.addEventListener('click', () => {
     if (!hasMoved) {
         window.open("金币页.html", "_blank");
