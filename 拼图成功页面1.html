@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 <title>音乐播放</title>
 <style>
 * {
@@ -205,6 +205,24 @@ audio {
 </div>
 
 <script>
+
+// 阻止双指缩放、双击放大
+document.addEventListener('touchstart', function(e) {
+    // 两根及以上手指直接阻断缩放
+    if (e.touches.length > 1) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+let lastTouchTime = 0;
+document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    // 300ms内连续点击 = 双击，阻止放大
+    if (now - lastTouchTime <= 300) {
+        e.preventDefault();
+    }
+    lastTouchTime = now;
+}, { passive: false });
 // 页面初始化默认标记为暂停
 localStorage.setItem('circleRunning', 'false');
 
@@ -391,28 +409,38 @@ nextBtn.onclick = () => {
     play();
 };
 
-// 红包拖拽逻辑（无吸附，仅允许小部分拖出屏幕）
-let isDrag = false, hasMoved = false, startX, startY, boxStartLeft, boxStartTop;
+// ===================== 修复后拖拽逻辑核心改动 =====================
+let isDrag = false, hasMoved = false;
+let startX, startY, boxStartLeft, boxStartTop;
+const MOVE_THRESHOLD = 6; // 移动6像素才算拖拽，轻微滑动不判定
+
 dragBox.addEventListener('mousedown', e => {
+    isDrag = true;
+    hasMoved = false;
     startX = e.clientX;
     startY = e.clientY;
     boxStartLeft = dragBox.offsetLeft;
     boxStartTop = dragBox.offsetTop;
-    isDrag = hasMoved = false;
 });
+// touchstart 删除 e.preventDefault()，不拦截click
 dragBox.addEventListener('touchstart', e => {
     const t = e.touches[0];
+    isDrag = true;
+    hasMoved = false;
     startX = t.clientX;
     startY = t.clientY;
     boxStartLeft = dragBox.offsetLeft;
     boxStartTop = dragBox.offsetTop;
-    isDrag = hasMoved = false;
-}, { passive: true });
+});
 
 document.addEventListener('mousemove', e => {
-    if (e.buttons !== 1 || !isDrag) return;
+    if (!isDrag) return;
     const moveX = e.clientX - startX;
     const moveY = e.clientY - startY;
+    // 超过阈值才标记为拖动
+    if(Math.abs(moveX) > MOVE_THRESHOLD || Math.abs(moveY) > MOVE_THRESHOLD) {
+        hasMoved = true;
+    }
     let L = boxStartLeft + moveX;
     let T = boxStartTop + moveY;
     const boxW = dragBox.offsetWidth;
@@ -422,11 +450,15 @@ document.addEventListener('mousemove', e => {
     dragBox.style.left = L + 'px';
     dragBox.style.top = T + 'px';
 });
+
 document.addEventListener('touchmove', e => {
     if (!isDrag) return;
     const t = e.touches[0];
     const moveX = t.clientX - startX;
     const moveY = t.clientY - startY;
+    if(Math.abs(moveX) > MOVE_THRESHOLD || Math.abs(moveY) > MOVE_THRESHOLD) {
+        hasMoved = true;
+    }
     let L = boxStartLeft + moveX;
     let T = boxStartTop + moveY;
     const boxW = dragBox.offsetWidth;
@@ -435,31 +467,23 @@ document.addEventListener('touchmove', e => {
     T = Math.max(-boxH * 0.3, Math.min(T, window.innerHeight - boxH * 0.7));
     dragBox.style.left = L + 'px';
     dragBox.style.top = T + 'px';
-    e.preventDefault();
-}, { passive: false });
-
-document.addEventListener('mousemove', e => {
-    if (e.buttons !== 1) return;
-    if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
-        hasMoved = isDrag = true;
-    }
 });
-document.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    if (Math.abs(t.clientX - startX) > 5 || Math.abs(t.clientY - startY) > 5) {
-        hasMoved = isDrag = true;
-    }
-}, { passive: true });
 
-document.addEventListener('mouseup', () => { setTimeout(() => isDrag = false, 50); });
-document.addEventListener('touchend', () => { setTimeout(() => isDrag = false, 50); });
+function endDrag() {
+    isDrag = false;
+}
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('touchend', endDrag);
+document.addEventListener('touchcancel', endDrag);
 
+// 点击跳转逻辑正常触发
 dragBox.addEventListener('click', () => {
     if (!hasMoved) {
         window.open("金币页.html", "_blank");
     }
     hasMoved = false;
 });
+// ======================================================================
 
 renderSongs();
 
