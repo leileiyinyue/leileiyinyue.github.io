@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>金币页</title>
-<script src="./lockScale.js" defer></script>
 <style>
 html, body {
   touch-action: manipulation;
@@ -508,7 +507,6 @@ button {
 }
 
   .btn-wrap {
-            /* 电脑端居中，限制最大宽度不会超长 */
             max-width: 480px;
             margin: 0 auto;
         }
@@ -517,19 +515,16 @@ button {
             display: block;
             padding: 16px 0;
             border-radius: 999px;
-            /* 和原图一致的蓝色渐变立体 */
             background: linear-gradient(180deg, #40a8ff 0%, #0078e8 100%);
             border: none;
             font-size: 32px;
             font-weight: bold;
             color: #fff;
             text-align: center;
-            /* 立体阴影 */
             box-shadow: 0 4px 0 #005eb8, 0 6px 12px rgba(0,120,232,0.3);
             cursor: pointer;
             transition: all 0.1s ease;
         }
-        /* 点击下压效果 */
         .buy-btn:active {
             transform: translateY(2px);
             box-shadow: 0 2px 0 #005eb8, 0 3px 6px rgba(0,120,232,0.3);
@@ -541,6 +536,23 @@ button {
 </style>
 </head>
 <body>
+
+<!-- 购买提示条 -->
+    <div style="
+        margin: 0 auto 16px auto;
+        max-width: 600px;
+        padding: 12px 15px;
+        border: 2px dashed #e4393c;
+        border-radius: 8px;
+        background-color: #fff5f5;
+        color: #c0392b;
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: center;
+    ">
+        <p>听歌赚取得现金不可提现，仅可兑换优惠券使用</p>
+    <p>优惠券当日有效，次日自动失效，优惠券可在图片区抵扣消费</p>
+    </div>
 <div class="container">
     <h2>我的金币详情</h2>
     <div class="coin-box" id="coinText">加载中...</div>
@@ -597,9 +609,7 @@ button {
             </div>
         </div>
 
-        <!-- 优惠券移至红包列表下方、容器内最底部 -->
         <div class="coupon-wrap">
-            <!-- 一元券 左侧 -->
             <div class="coupon">
                 <div class="price">
                     <span class="symbol">¥</span>
@@ -608,7 +618,6 @@ button {
                 <div class="condition">满2元可用</div>
                 <button class="exchange-btn">兑换</button>
             </div>
-            <!-- 二十元券 右侧 -->
             <div class="coupon">
                 <div class="price">
                     <span class="symbol">¥</span>
@@ -750,26 +759,29 @@ const Storage = {
 };
 const today = Storage.getToday();
 
+// 统一DOM容器，空值占位，页面加载后赋值
 const Dom = {
-    coinText:document.getElementById('coinText'),
-    moneyText:document.getElementById('moneyText'),
-    totalCash:document.getElementById('totalCash'),
-    exchangeBtn:document.getElementById('exchangeBtn'),
-    dayTip:document.getElementById('dayTip'),
-    modal:document.getElementById('modal'),
-    closeBtn:document.getElementById('closeBtn'),
-    doubleBtn:document.getElementById('doubleBtn'),
-    goldText:document.getElementById('goldText'),
-    videoModal:document.getElementById('videoModal'),
-    adVideo:document.getElementById('adVideo'),
-    adSource:document.querySelector('#adVideo source'),
-    audioBtn:document.getElementById('audioBtn'),
-    countdownEl:document.getElementById('countdown'),
-    adCloseBtn:document.getElementById('adCloseBtn'),
-    downloadBtn:document.getElementById('downloadBtn'),
-    packets:document.querySelectorAll('.red-packet'),
-    dragWrap:document.querySelector('.drag-wrap'),
-    dragList:document.querySelector('.drag-list')
+    coinText: null,
+    moneyText: null,
+    totalCash: null,
+    exchangeBtn: null,
+    dayTip: null,
+    modal: null,
+    closeBtn: null,
+    doubleBtn: null,
+    goldText: null,
+    videoModal: null,
+    adVideo: null,
+    adSource: null,
+    audioBtn: null,
+    countdownEl: null,
+    adCloseBtn: null,
+    downloadBtn: null,
+    packets: null,
+    dragWrap: null,
+    dragList: null,
+    coupon1Btn: null,
+    coupon20Btn: null
 };
 
 (function initReset(){
@@ -785,9 +797,7 @@ const Dom = {
 
 // ========== 跨页音频控制标记 ==========
 function setAudioCmd(type){
-    // type: pause / play
     localStorage.setItem('audioControlCmd', type);
-    // 触发一次空修改，保证storage事件生效
     localStorage.setItem('audioControlTime', Date.now().toString());
 }
 
@@ -796,7 +806,6 @@ function doGetRewardAndJump(){
     if(videoTimer) clearInterval(videoTimer);
     if(remainTime > 0){
         Dom.videoModal.classList.remove('show');
-        // 恢复播放页音频
         setAudioCmd('play');
         return;
     }
@@ -815,6 +824,8 @@ function doGetRewardAndJump(){
 }
 
 function updateView(){
+    // 页面未渲染完成直接跳过，不执行渲染逻辑
+    if(!Dom.coinText) return;
     let coin = Storage.getCoin();
     let cash = Storage.getTotalCash();
     Dom.coinText.textContent = `当前总金币：${coin}`;
@@ -830,6 +841,8 @@ function updateView(){
         p.className = 'red-packet';
         if(st) p.classList.add(st);
     });
+    // 更新金额同步刷新优惠券
+    initCouponStatus();
 }
 
 function calcTotalMinute() {
@@ -869,7 +882,6 @@ function checkPacketLevel() {
     updateView();
 }
 
-// ========== 关键修改：用 setTimeout 替代 requestAnimationFrame，后台也能计时 ==========
 let lastTick = Date.now();
 let hiddenStart = 0;
 
@@ -888,7 +900,6 @@ function loopCheck() {
     setTimeout(loopCheck, 500);
 }
 
-// ========== 关键修改：页面隐藏/显示时自动补时间 ==========
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         hiddenStart = Date.now();
@@ -916,60 +927,170 @@ function watchPlayStatus() {
     }, 500);
 }
 
-// ========== 修复横向滚动，支持页面上下滑动 ==========
 let startX = 0, startY = 0, currentX = 0, prevX = 0;
 function getMaxTranslate() {
     return -(Dom.dragList.scrollWidth - Dom.dragWrap.clientWidth);
 }
 
-Dom.dragWrap.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-});
+// 优惠券状态更新函数
+const couponStorageKey = "couponExchangeDay";
+const todayStr = Storage.getToday();
+function initCouponStatus() {
+    // 不存在优惠券按钮直接退出，杜绝报错
+    if(!Dom.coupon1Btn || !Dom.coupon20Btn) return;
 
-Dom.dragWrap.addEventListener('touchmove', e => {
-    const touch = e.touches[0];
-    const moveX = touch.clientX - startX;
-    const moveY = touch.clientY - startY;
-    
-    // 只有横向滑动幅度更大时才拦截默认滚动，纵向滑动不拦截
-    if (Math.abs(moveX) > Math.abs(moveY)) {
-        e.preventDefault();
-        currentX = prevX + moveX;
-        Dom.dragList.style.transform = `translateX(${Math.max(getMaxTranslate(), Math.min(0, currentX))}px)`;
+    let record = JSON.parse(localStorage.getItem(couponStorageKey) || "{}");
+    if (record.date !== todayStr) {
+        record = { date: todayStr, used: "" };
+        localStorage.setItem(couponStorageKey, JSON.stringify(record));
     }
-});
 
-Dom.dragWrap.addEventListener('touchend', () => {
-    prevX = currentX;
-});
+    const totalCash = Number(Storage.getTotalCash());
+    if (record.used || totalCash < 1) {
+        Dom.coupon1Btn.disabled = true;
+    } else {
+        Dom.coupon1Btn.disabled = false;
+    }
+    if (record.used || totalCash < 20) {
+        Dom.coupon20Btn.disabled = true;
+    } else {
+        Dom.coupon20Btn.disabled = false;
+    }
+}
 
+// 页面全部加载完成后统一绑定DOM与事件
 window.addEventListener('load',()=>{
+    // 1. 统一赋值所有DOM元素
+    Dom.coinText = document.getElementById('coinText');
+    Dom.moneyText = document.getElementById('moneyText');
+    Dom.totalCash = document.getElementById('totalCash');
+    Dom.exchangeBtn = document.getElementById('exchangeBtn');
+    Dom.dayTip = document.getElementById('dayTip');
+    Dom.modal = document.getElementById('modal');
+    Dom.closeBtn = document.getElementById('closeBtn');
+    Dom.doubleBtn = document.getElementById('doubleBtn');
+    Dom.goldText = document.getElementById('goldText');
+    Dom.videoModal = document.getElementById('videoModal');
+    Dom.adVideo = document.getElementById('adVideo');
+    Dom.adSource = document.querySelector('#adVideo source');
+    Dom.audioBtn = document.getElementById('audioBtn');
+    Dom.countdownEl = document.getElementById('countdown');
+    Dom.adCloseBtn = document.getElementById('adCloseBtn');
+    Dom.downloadBtn = document.getElementById('downloadBtn');
+    Dom.packets = document.querySelectorAll('.red-packet');
+    Dom.dragWrap = document.querySelector('.drag-wrap');
+    Dom.dragList = document.querySelector('.drag-list');
+    // 优惠券按钮仅在页面加载完获取
+    const couponBoxList = document.querySelectorAll(".coupon");
+    Dom.coupon1Btn = couponBoxList[0].querySelector(".exchange-btn");
+    Dom.coupon20Btn = couponBoxList[1].querySelector(".exchange-btn");
+
+    // 2. 滑动事件绑定
+    Dom.dragWrap.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    });
+    Dom.dragWrap.addEventListener('touchmove', e => {
+        const touch = e.touches[0];
+        const moveX = touch.clientX - startX;
+        const moveY = touch.clientY - startY;
+        if (Math.abs(moveX) > Math.abs(moveY)) {
+            e.preventDefault();
+            currentX = prevX + moveX;
+            Dom.dragList.style.transform = `translateX(${Math.max(getMaxTranslate(), Math.min(0, currentX))}px)`;
+        }
+    });
+    Dom.dragWrap.addEventListener('touchend', () => {
+        prevX = currentX;
+    });
+
+    // 3. 红包点击事件
+    Dom.packets.forEach(packet=>{
+        packet.addEventListener('click',function(){
+            if(!this.classList.contains('pending') || this.classList.contains('received')) return;
+            setAudioCmd('pause');
+            currentPacket = this;
+            currentGold = parseInt(this.querySelector('.packet-num').textContent);
+            Dom.goldText.innerText = `${currentGold} 金币`;
+            Dom.modal.classList.add('show');
+        });
+    });
+
+    // 4. 弹窗按钮
+    Dom.closeBtn.addEventListener('click', receiveSingle);
+    Dom.doubleBtn.addEventListener('click', openAdPage);
+    Dom.adCloseBtn.addEventListener('click', doGetRewardAndJump);
+    Dom.countdownEl.addEventListener('click', doGetRewardAndJump);
+    Dom.audioBtn.addEventListener('click',()=>{
+        Dom.adVideo.muted = !Dom.adVideo.muted;
+        Dom.audioBtn.textContent = Dom.adVideo.muted ? "🔇" : "🔊";
+    });
+    Dom.downloadBtn.addEventListener('click',()=>{
+        alert('触发下载/跳转应用商店');
+    });
+
+    // 5. 金币兑换按钮
+    Dom.exchangeBtn.addEventListener('click', function(){
+        const coin = Storage.getCoin();
+        if (coin < CONFIG.MIN_EXCHANGE || Storage.hasExchangedToday()) {
+            return;
+        }
+        const exchangeMoney = coin / CONFIG.EXCHANGE_RATE;
+        let totalCash = Storage.getTotalCash() + exchangeMoney;
+        localStorage.setItem('totalCash', totalCash.toFixed(2));
+        Storage.setCoin(0);
+        localStorage.setItem('lastExchangeDate', Storage.getToday());
+        updateView();
+        alert(`兑换成功！\n兑换比例：50000金币 = 1元\n本次兑换 ${exchangeMoney.toFixed(2)} 元`);
+    });
+
+    // 6. 优惠券点击事件（页面加载完再绑定，保证按钮存在）
+    Dom.coupon1Btn.addEventListener("click", function () {
+        let record = JSON.parse(localStorage.getItem(couponStorageKey));
+        if (record.used) return;
+        let totalCash = Number(Storage.getTotalCash());
+        if (totalCash < 1) {
+            alert("余额不足，无法兑换1元券");
+            return;
+        }
+        totalCash = Math.max(0, totalCash - 1);
+        localStorage.setItem('totalCash', totalCash.toFixed(2));
+        record.used = "1";
+        localStorage.setItem(couponStorageKey, JSON.stringify(record));
+        updateView();
+        alert("已扣除 1 元");
+    });
+    Dom.coupon20Btn.addEventListener("click", function () {
+        let record = JSON.parse(localStorage.getItem(couponStorageKey));
+        if (record.used) return;
+        let totalCash = Number(Storage.getTotalCash());
+        if (totalCash < 20) {
+            alert("余额不足，无法兑换20元券");
+            return;
+        }
+        totalCash = Math.max(0, totalCash - 20);
+        localStorage.setItem('totalCash', totalCash.toFixed(2));
+        record.used = "20";
+        localStorage.setItem(couponStorageKey, JSON.stringify(record));
+        updateView();
+        alert("已扣除 20 元");
+    });
+
+    // 7. 初始化逻辑
     if(Storage.getTimerPoint() === 0){
         Storage.setTimerPoint(Date.now());
     }
     updateView();
+    initCouponStatus();
     watchPlayStatus();
     loopCheck();
 });
 
+// 全局变量
 let currentPacket = null;
 let currentGold = 0;
 let remainTime = CONFIG.WATCH_SECONDS;
 let videoTimer = null;
-
-Dom.packets.forEach(packet=>{
-    packet.addEventListener('click',function(){
-        if(!this.classList.contains('pending') || this.classList.contains('received')) return;
-        // 点击待领取红包 → 发送暂停指令给播放页
-        setAudioCmd('pause');
-
-        currentPacket = this;
-        currentGold = parseInt(this.querySelector('.packet-num').textContent);
-        Dom.goldText.innerText = `${currentGold} 金币`;
-        Dom.modal.classList.add('show');
-    });
-});
 
 function receiveSingle(){
     Dom.modal.classList.remove('show');
@@ -980,7 +1101,6 @@ function receiveSingle(){
     Storage.setPacketState(currentPacket.dataset.id,'received');
     currentPacket = null;
     updateView();
-    // 关闭弹窗 → 发送播放指令
     setAudioCmd('play');
 }
 
@@ -1006,115 +1126,7 @@ function openAdPage(e){
     },1000);
 }
 
-Dom.adCloseBtn.addEventListener('click', doGetRewardAndJump);
-Dom.countdownEl.addEventListener('click', doGetRewardAndJump);
-Dom.audioBtn.addEventListener('click',()=>{
-    Dom.adVideo.muted = !Dom.adVideo.muted;
-    Dom.audioBtn.textContent = Dom.adVideo.muted ? "🔇" : "🔊";
-});
-Dom.closeBtn.addEventListener('click', receiveSingle);
-Dom.doubleBtn.addEventListener('click', openAdPage);
-Dom.downloadBtn.addEventListener('click',()=>{
-    alert('触发下载/跳转应用商店');
-});
-
-//金币兑换
-Dom.exchangeBtn.addEventListener('click', function(){
-    const coin = Storage.getCoin();
-    // 校验：不足最低兑换额度 / 今日已兑换，直接返回
-    if (coin < CONFIG.MIN_EXCHANGE || Storage.hasExchangedToday()) {
-        return;
-    }
-    // 50000金币 = 1元
-    const exchangeMoney = coin / CONFIG.EXCHANGE_RATE;
-    let totalCash = Storage.getTotalCash() + exchangeMoney;
-    // 保留2位小数存入本地
-    localStorage.setItem('totalCash', totalCash.toFixed(2));
-    // 清空当前金币
-    Storage.setCoin(0);
-    // 标记今日已兑换
-    localStorage.setItem('lastExchangeDate', Storage.getToday());
-    // 刷新页面数据
-    updateView();
-    alert(`兑换成功！\n兑换比例：50000金币 = 1元\n本次兑换 ${exchangeMoney.toFixed(2)} 元`);
-});
-
-// ========== 优惠券扣除金额 + 标记今日已用券 ==========
-const couponStorageKey = "couponExchangeDay";
-const todayStr = Storage.getToday();
-const coupon1Btn = document.querySelectorAll(".coupon")[0].querySelector(".exchange-btn");
-const coupon20Btn = document.querySelectorAll(".coupon")[1].querySelector(".exchange-btn");
-
-// 初始化优惠券状态（加载页面就判断禁用）
-function initCouponStatus() {
-  let record = JSON.parse(localStorage.getItem(couponStorageKey) || "{}");
-  if (record.date !== todayStr) {
-    record = { date: todayStr, used: "" };
-    localStorage.setItem(couponStorageKey, JSON.stringify(record));
-  }
-
-  const totalCash = Number(Storage.getTotalCash());
-  // 已使用 或 余额不足，禁用对应按钮
-  if (record.used || totalCash < 1) {
-    coupon1Btn.disabled = true;
-  }
-  if (record.used || totalCash < 20) {
-    coupon20Btn.disabled = true;
-  }
-}
-
-// 一元券点击
-coupon1Btn.addEventListener("click", function () {
-  let record = JSON.parse(localStorage.getItem(couponStorageKey));
-  if (record.used) return;
-
-  let totalCash = Number(Storage.getTotalCash());
-  if (totalCash < 1) {
-    alert("余额不足，无法兑换1元券");
-    return;
-  }
-
-  totalCash = Math.max(0, totalCash - 1);
-  localStorage.setItem('totalCash', totalCash.toFixed(2));
-
-  record.used = "1";
-  localStorage.setItem(couponStorageKey, JSON.stringify(record));
-
-  coupon1Btn.disabled = true;
-  coupon20Btn.disabled = true;
-
-  updateView();
-  alert("已扣除 1 元");
-});
-
-// 20元券点击
-coupon20Btn.addEventListener("click", function () {
-  let record = JSON.parse(localStorage.getItem(couponStorageKey));
-  if (record.used) return;
-
-  let totalCash = Number(Storage.getTotalCash());
-  if (totalCash < 20) {
-    alert("余额不足，无法兑换20元券");
-    return;
-  }
-
-  totalCash = Math.max(0, totalCash - 20);
-  localStorage.setItem('totalCash', totalCash.toFixed(2));
-
-  record.used = "20";
-  localStorage.setItem(couponStorageKey, JSON.stringify(record));
-
-  coupon1Btn.disabled = true;
-  coupon20Btn.disabled = true;
-
-  updateView();
-  alert("已扣除 20 元");
-});
-
-// 页面加载初始化
-initCouponStatus();
-
-// 全局禁止双指缩放、双击放大
+// 全局禁止缩放
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
