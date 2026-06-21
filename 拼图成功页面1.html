@@ -183,16 +183,13 @@ audio {
         text-align: center;
     ">
         进度条达到十万金币就不转了, 需要把金币兑换成钱数<br>
-        点圆形进度条就可跳转到兑换页面,手机端黑屏无法播放音乐,需要把手机设置成常亮<br>
-        手机端使用QQ浏览器是最佳选择<br>
-        禁止清理浏览器缓存，清理了后果自己负责
+        点圆形进度条就可跳转到兑换页面,手机端黑屏无法播放音乐,需要把手机设置成常亮
     </div>
 
 <div class="container">
     <h2>点击歌曲循环播放</h2>
     <p class="tip-text">播放音乐即可领取红包</p>
     <p class="tip-text">暂停则红包停止计时</p>
-    <!-- 修改：显示格式和金币页统一，同时保留上限 -->
     <div class="coin-total" id="coinTotal">当前总金币：0 / 每日上限100000</div>
     <div class="song-list" id="songList"></div>
 </div>
@@ -207,10 +204,8 @@ audio {
 </div>
 
 <script>
-
 // 阻止双指缩放、双击放大
 document.addEventListener('touchstart', function(e) {
-    // 两根及以上手指直接阻断缩放
     if (e.touches.length > 1) {
         e.preventDefault();
     }
@@ -219,16 +214,14 @@ document.addEventListener('touchstart', function(e) {
 let lastTouchTime = 0;
 document.addEventListener('touchend', function(e) {
     const now = Date.now();
-    // 300ms内连续点击 = 双击，阻止放大
     if (now - lastTouchTime <= 300) {
         e.preventDefault();
     }
     lastTouchTime = now;
 }, { passive: false });
-// 页面初始化默认标记为暂停
+
 localStorage.setItem('circleRunning', 'false');
 
-// 验证入口（可保留）
 const urlParams = new URLSearchParams(window.location.search);
 const key = urlParams.get('key');
 const canPlay = !!key && key.length >= 10;
@@ -255,44 +248,35 @@ const circumference = 2 * Math.PI * 45;
 let progress = 0;
 let timer = null;
 
-// 音量解锁
 document.addEventListener('click', () => {
   audioPlayer.volume = 1;
 }, { once: true });
 
-// 金币初始化
 if (!localStorage.getItem('userCoin')) localStorage.setItem('userCoin', '0');
 
-// 每日金币上限 & 日期标记
 const LIMIT_COIN = 100000;
 const today = new Date();
 const todayDateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-// 记录今日是否已达上限
 let limitDate = localStorage.getItem('limitDate') || '';
 
 circle.style.strokeDasharray = circumference;
 circle.style.strokeDashoffset = circumference;
 
-// 核心判断：是否允许进度条转动/领取金币
 function canRunCircle() {
     let coin = parseInt(localStorage.getItem('userCoin') || 0);
-    // 跨天：清空上限标记，重置状态
     if (limitDate !== todayDateStr) {
         localStorage.removeItem('limitDate');
         limitDate = '';
     }
-    // 金币未满 且 今日未标记上限 → 允许转动
     return coin < LIMIT_COIN;
 }
 
-// 同步状态：达上限则停止计时器
 function updateCircleStatus() {
     let ok = canRunCircle();
     if (!ok && timer) {
         clearInterval(timer);
         timer = null;
     }
-    // 金币达到上限，标记今日已达顶
     let coin = parseInt(localStorage.getItem('userCoin') || 0);
     if (coin >= LIMIT_COIN && limitDate !== todayDateStr) {
         localStorage.setItem('limitDate', todayDateStr);
@@ -300,7 +284,6 @@ function updateCircleStatus() {
     }
 }
 
-// 更新金币显示
 function updateCoinDisplay() {
     let coin = parseInt(localStorage.getItem('userCoin') || 0);
     coinTotal.textContent = `当前总金币：${coin} / 每日上限${LIMIT_COIN}`;
@@ -310,29 +293,26 @@ updateCoinDisplay();
 setInterval(updateCoinDisplay, 200);
 window.addEventListener('storage', updateCoinDisplay);
 
-// 保活：页面切后台自动续播
 document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && !audioPlayer.paused) {
-        audioPlayer.play().catch(() => {});
+    if (!document.hidden) {
+        checkAudioCmd();
+        if (!audioPlayer.paused) {
+            audioPlayer.play().catch(() => {});
+        }
     }
 });
 
-// 播放事件
 audioPlayer.addEventListener('play', () => {
-    // 新增：标记正在播放，金币页开始计时
     localStorage.setItem('circleRunning', 'true');
-    if (canRunCircle() && !timer) timer = setInterval(runRotate, 24);//原来是30
+    if (canRunCircle() && !timer) timer = setInterval(runRotate, 24);
 });
 
-// 暂停事件
 audioPlayer.addEventListener('pause', () => {
-    // 新增：标记暂停，金币页停止计时
     localStorage.setItem('circleRunning', 'false');
     clearInterval(timer);
     timer = null;
 });
 
-// 歌曲播放完毕自动下一首
 audioPlayer.addEventListener('ended', () => {
     clearInterval(timer);
     timer = null;
@@ -340,15 +320,13 @@ audioPlayer.addEventListener('ended', () => {
     play();
 });
 
-// 红包转动 + 加金币
 function runRotate() {
     if (!canRunCircle()) return;
     progress += 0.06;
     if (progress >= 100) {
         let c = parseInt(localStorage.getItem('userCoin') || 0);
-        // 再次校验，防止超上限
         if (c < LIMIT_COIN) {
-            localStorage.setItem('userCoin', c + 218);//此处100是转一圈给的金币
+            localStorage.setItem('userCoin', c + 218);
             document.getElementById('coin').classList.add('show');
             setTimeout(()=>document.getElementById('coin').classList.remove('show'),4000);
         }
@@ -357,7 +335,6 @@ function runRotate() {
     circle.style.strokeDashoffset = circumference - (progress/100)*circumference;
 }
 
-// 歌曲列表
 function getSongs() {
     return [
         {name:"半生雪", src:"半生雪.mp3"},
@@ -411,10 +388,10 @@ nextBtn.onclick = () => {
     play();
 };
 
-// ===================== 修复后拖拽逻辑核心改动 =====================
+// 拖拽逻辑
 let isDrag = false, hasMoved = false;
 let startX, startY, boxStartLeft, boxStartTop;
-const MOVE_THRESHOLD = 6; // 移动6像素才算拖拽，轻微滑动不判定
+const MOVE_THRESHOLD = 6;
 
 dragBox.addEventListener('mousedown', e => {
     isDrag = true;
@@ -424,7 +401,6 @@ dragBox.addEventListener('mousedown', e => {
     boxStartLeft = dragBox.offsetLeft;
     boxStartTop = dragBox.offsetTop;
 });
-// touchstart 删除 e.preventDefault()，不拦截click
 dragBox.addEventListener('touchstart', e => {
     const t = e.touches[0];
     isDrag = true;
@@ -439,7 +415,6 @@ document.addEventListener('mousemove', e => {
     if (!isDrag) return;
     const moveX = e.clientX - startX;
     const moveY = e.clientY - startY;
-    // 超过阈值才标记为拖动
     if(Math.abs(moveX) > MOVE_THRESHOLD || Math.abs(moveY) > MOVE_THRESHOLD) {
         hasMoved = true;
     }
@@ -478,38 +453,39 @@ document.addEventListener('mouseup', endDrag);
 document.addEventListener('touchend', endDrag);
 document.addEventListener('touchcancel', endDrag);
 
-// 点击跳转逻辑正常触发
 dragBox.addEventListener('click', () => {
     if (!hasMoved) {
         window.open("金币页.html", "_blank");
     }
     hasMoved = false;
 });
-// ======================================================================
 
 renderSongs();
 
-// ===================== 【新增：跨页监听金币页指令】=====================
-// 监听 localStorage 变化，接收金币页播放/暂停指令
-window.addEventListener('storage', function(e) {
-    // 接收暂停指令
-    if (e.key === 'audioControlCmd' && e.newValue === 'pause') {
+// 轮询读取音频指令，解决手机storage不触发
+let audioCmdTimer = null;
+function checkAudioCmd() {
+    const cmd = localStorage.getItem('audioControlCmd');
+    if (!cmd) return;
+    localStorage.removeItem('audioControlCmd');
+    if (cmd === 'pause') {
         audioPlayer.pause();
         playPauseBtn.textContent = '播放';
     }
-    // 接收播放指令
-    if (e.key === 'audioControlCmd' && e.newValue === 'play') {
+    if (cmd === 'play') {
         audioPlayer.play().catch(()=>{});
         playPauseBtn.textContent = '暂停';
     }
+}
+audioCmdTimer = setInterval(checkAudioCmd, 300);
+window.addEventListener('beforeunload', () => clearInterval(audioCmdTimer));
+window.addEventListener('storage', e => {
+    if (e.key === 'audioControlCmd') checkAudioCmd();
 });
-
-// 页面加载清空旧指令，避免残留
-window.addEventListener('load', function(){
+window.addEventListener('load', () => {
     localStorage.removeItem('audioControlCmd');
     localStorage.removeItem('audioControlTime');
 });
-// ======================================================================
 </script>
 </body>
 </html>
