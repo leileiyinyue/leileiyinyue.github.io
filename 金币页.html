@@ -821,14 +821,18 @@ function resumeAudioByTap(e) {
     setAudioCmd('play');
 }
 
-// =========【修改】========= 增加形参e接收点击事件
+// =========【修改】========= 增加形参e接收点击事件 + 兜底重发指令
 function doGetRewardAndJump(e){
     Dom.adVideo.pause();
     if(videoTimer) clearInterval(videoTimer);
     if(remainTime > 0){
         Dom.videoModal.classList.remove('show');
-        // =========【修改】========= 替换原setAudioCmd('play')
         resumeAudioByTap(e);
+        // 兜底延迟重发播放指令，兼容浏览器storage不触发
+        setTimeout(()=>{
+            localStorage.setItem('audioControlCmd','play');
+            localStorage.setItem('audioControlTime',Date.now().toString());
+        },50);
         return;
     }
     if(currentPacket){
@@ -841,8 +845,12 @@ function doGetRewardAndJump(e){
         updateView();
     }
     Dom.videoModal.classList.remove('show');
-    // =========【修改】========= 替换原setAudioCmd('play')
     resumeAudioByTap(e);
+    // 兜底延迟重发播放指令
+    setTimeout(()=>{
+        localStorage.setItem('audioControlCmd','play');
+        localStorage.setItem('audioControlTime',Date.now().toString());
+    },50);
     window.location.href = "金币页.html";
 }
 
@@ -1039,10 +1047,9 @@ window.addEventListener('load',()=>{
         });
     });
 
-    // 4. 弹窗按钮
+    // 4. 弹窗按钮（传递e事件）
     Dom.closeBtn.addEventListener('click', receiveSingle);
     Dom.doubleBtn.addEventListener('click', openAdPage);
-    // =========【修改】========= 改为箭头函数传递点击事件e
     Dom.adCloseBtn.addEventListener('click', (e) => doGetRewardAndJump(e));
     Dom.countdownEl.addEventListener('click', (e) => doGetRewardAndJump(e));
     Dom.audioBtn.addEventListener('click',()=>{
@@ -1068,7 +1075,7 @@ window.addEventListener('load',()=>{
         alert(`兑换成功！\n兑换比例：50000金币 = 1元\n本次兑换 ${exchangeMoney.toFixed(2)} 元`);
     });
 
-    // 6. 优惠券点击事件（页面加载完再绑定，保证按钮存在）
+    // 6. 优惠券点击事件
     Dom.coupon1Btn.addEventListener("click", function () {
         let record = JSON.parse(localStorage.getItem(couponStorageKey));
         if (record.used) return;
