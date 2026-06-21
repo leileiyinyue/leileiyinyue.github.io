@@ -663,7 +663,6 @@ a {
     </div>
 </div>
 <script>
-const audioChannel = new BroadcastChannel('music_audio_channel');
 const CONFIG = {
     EXCHANGE_RATE: 50000,
     MIN_EXCHANGE: 10000,
@@ -763,22 +762,21 @@ const Dom = {
         Storage.setTimerPoint(Date.now());
     }
 })();
-function setAudioCmd(type){
-    localStorage.setItem('audioControlCmd', type);
-    localStorage.setItem('audioControlTime', Date.now().toString());
+// 暂停音乐标记
+function pauseMusicMark(){
+    localStorage.setItem('audioControlCmd','pause');
 }
-// 点击手势同步发送播放消息（无延时，保留手势权限）
-function resumeAudioByTap(e) {
-    e?.preventDefault();
-    setAudioCmd('play');
-    audioChannel.postMessage({type:'play'});
+// 点击关闭广告同步写入播放标记（无延时，保留点击手势）
+function setResumeMark(){
+    localStorage.setItem('resumePlay','1');
+    localStorage.setItem('audioControlCmd','play');
 }
 function doGetRewardAndJump(e){
     Dom.adVideo.pause();
     if(videoTimer) clearInterval(videoTimer);
     if(remainTime > 0){
         Dom.videoModal.classList.remove('show');
-        resumeAudioByTap(e);
+        setResumeMark();
         return;
     }
     if(currentPacket){
@@ -791,7 +789,7 @@ function doGetRewardAndJump(e){
         updateView();
     }
     Dom.videoModal.classList.remove('show');
-    resumeAudioByTap(e);
+    setResumeMark();
     window.location.href = "金币页.html";
 }
 function updateView(){
@@ -940,8 +938,7 @@ window.addEventListener('load',()=>{
     Dom.packets.forEach(packet=>{
         packet.addEventListener('click',function(){
             if(!this.classList.contains('pending') || this.classList.contains('received')) return;
-            setAudioCmd('pause');
-            audioChannel.postMessage({type:'pause'});
+            pauseMusicMark();
             currentPacket = this;
             currentGold = parseInt(this.querySelector('.packet-num').textContent);
             Dom.goldText.innerText = `${currentGold} 金币`;
@@ -1021,8 +1018,7 @@ function receiveSingle(){
     Storage.setPacketState(currentPacket.dataset.id,'received');
     currentPacket = null;
     updateView();
-    setAudioCmd('play');
-    audioChannel.postMessage({type:'play'});
+    setResumeMark();
 }
 function openAdPage(e){
     e.preventDefault();
