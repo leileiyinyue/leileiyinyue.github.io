@@ -532,7 +532,7 @@ button {
         a {
   text-decoration: none;
 }
-     /* ===== 粘贴在这里 ===== */
+       /* ===== 粘贴在这里 ===== */
   @media (min-width:768px){
   .drag-wrap{
     overflow-x: visible;
@@ -546,6 +546,7 @@ button {
     flex-shrink: 1;
   }
 }
+
 </style>
 </head>
 <body>
@@ -814,12 +815,20 @@ function setAudioCmd(type){
     localStorage.setItem('audioControlTime', Date.now().toString());
 }
 
-function doGetRewardAndJump(){
+// =========【新增】========= 移动端靠点击手势解锁音频播放
+function resumeAudioByTap(e) {
+    e?.preventDefault();
+    setAudioCmd('play');
+}
+
+// =========【修改】========= 增加形参e接收点击事件
+function doGetRewardAndJump(e){
     Dom.adVideo.pause();
     if(videoTimer) clearInterval(videoTimer);
     if(remainTime > 0){
         Dom.videoModal.classList.remove('show');
-        setAudioCmd('play');
+        // =========【修改】========= 替换原setAudioCmd('play')
+        resumeAudioByTap(e);
         return;
     }
     if(currentPacket){
@@ -832,7 +841,8 @@ function doGetRewardAndJump(){
         updateView();
     }
     Dom.videoModal.classList.remove('show');
-    setAudioCmd('play');
+    // =========【修改】========= 替换原setAudioCmd('play')
+    resumeAudioByTap(e);
     window.location.href = "金币页.html";
 }
 
@@ -1032,8 +1042,9 @@ window.addEventListener('load',()=>{
     // 4. 弹窗按钮
     Dom.closeBtn.addEventListener('click', receiveSingle);
     Dom.doubleBtn.addEventListener('click', openAdPage);
-    Dom.adCloseBtn.addEventListener('click', doGetRewardAndJump);
-    Dom.countdownEl.addEventListener('click', doGetRewardAndJump);
+    // =========【修改】========= 改为箭头函数传递点击事件e
+    Dom.adCloseBtn.addEventListener('click', (e) => doGetRewardAndJump(e));
+    Dom.countdownEl.addEventListener('click', (e) => doGetRewardAndJump(e));
     Dom.audioBtn.addEventListener('click',()=>{
         Dom.adVideo.muted = !Dom.adVideo.muted;
         Dom.audioBtn.textContent = Dom.adVideo.muted ? "🔇" : "🔊";
