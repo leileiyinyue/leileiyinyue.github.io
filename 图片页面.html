@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+<noscript>
+<style>
+html,body{height:100%;overflow:hidden;margin:0;padding:0;}
+.mask-box{
+    position:fixed;inset:0;background:#000;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;z-index:999999;
+    padding:20px;text-align:center;
+}
+body>*{display:none !important;visibility:hidden !important;}
+</style>
+<div class="mask-box">
+    页面需要开启JavaScript才能正常使用，请在浏览器设置允许JS后刷新页面
+</div>
+</noscript> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+     <!-- 禁止缓存三行 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
     <title>商品列表</title>
     <script src="./lockScale.js" defer></script>
     <style>
@@ -205,6 +225,47 @@ document.addEventListener('visibilitychange', function() {
     createGoodsList();
   }
 });
+
+// 1. 禁用右键菜单
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// 2. 禁用F12、Ctrl+U、Ctrl+Shift+I/C/J 开发者快捷键
+document.addEventListener('keydown', e => {
+  const key = e.key.toLowerCase();
+  // F12
+  if (key === 'f12') e.preventDefault();
+  // Ctrl + U 查看源码
+  if (e.ctrlKey && key === 'u') e.preventDefault();
+  // Ctrl+Shift+I / Ctrl+Shift+J 开发者工具
+  if (e.ctrlKey && e.shiftKey && (key === 'i' || key === 'j')) e.preventDefault();
+  // Ctrl+S 保存页面
+  if (e.ctrlKey && key === 's') e.preventDefault();
+});
+// 3. 检测打开控制台窗口，弹窗刷新页面（进阶防护）
+let devToolsOpen = false;
+const checkDevTool = () => {
+  const threshold = 160;
+  const widthDiff = window.outerWidth - window.innerWidth;
+  const heightDiff = window.outerHeight - window.innerHeight;
+  if (widthDiff > threshold || heightDiff > threshold) {
+    if (!devToolsOpen) {
+      devToolsOpen = true;
+      alert('禁止打开开发者工具，页面即将刷新');
+      window.location.reload();
+    }
+  } else {
+    devToolsOpen = false;
+  }
+};
+setInterval(checkDevTool, 800);
+ // 4. 禁止拖拽复制文字/图片
+document.addEventListener('dragstart', e => e.preventDefault());
+
+// 下面粘贴这段拦截保存代码
+// 拦截Ctrl+S保存页面
+document.addEventListener('keydown',e=>{
+    if(e.ctrlKey && e.key.toLowerCase() === 's') e.preventDefault();
+})
 </script>
 </body>
 </html>
