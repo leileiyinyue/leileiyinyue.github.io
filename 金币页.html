@@ -16,18 +16,13 @@ body>*{display:none !important;visibility:hidden !important;}
     页面需要开启JavaScript才能正常使用，请在浏览器设置允许JS后刷新页面
 </div>
 </noscript>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <!-- 禁止缓存三行 -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-
-
 <title>金币页</title>
-<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-<script>LA.init({id:"3IK9Vp8DTu6SSJ6w",ck:"3IK9Vp8DTu6SSJ6w"})</script>
 <style>
 html, body {
   touch-action: manipulation;
@@ -144,7 +139,6 @@ button {
     gap: 10px;
     transition: transform 0.2s ease-out;
 }
-
 /* 优惠券样式 */
 .coupon-wrap {
     display: flex;
@@ -201,7 +195,6 @@ button {
     align-items: center;
     justify-content: center;
 }
-
 .red-packet {
     width: 92px;
     height: 130px;
@@ -501,7 +494,6 @@ button {
     pointer-events: auto !important;
     z-index: 9999;
 }
-
 /* 整张优惠券置灰 + 禁止点击 */
 .coupon:has(.exchange-btn:disabled) {
     opacity: 0.6;
@@ -513,7 +505,6 @@ button {
     color: #888;
     cursor: not-allowed;
 }
-
 /* 优惠券下方提示文案样式 */
 .coupon-tips {
     margin-top: 20px;
@@ -529,7 +520,6 @@ button {
 .coupon-tips p {
     margin: 4px 0;
 }
-
   .btn-wrap {
             max-width: 480px;
             margin: 0 auto;
@@ -570,11 +560,9 @@ button {
     flex-shrink: 1;
   }
 }
-
 </style>
 </head>
 <body>
-
 <!-- 购买提示条 -->
     <div style="
         margin: 0 auto 16px auto;
@@ -598,7 +586,6 @@ button {
     <div class="total-cash" id="totalCash">当前总钱数：0 元</div>
     <div class="tip" id="dayTip">每日仅限兑换1次，0点自动重置</div>
     <button class="exchange-btn" id="exchangeBtn">立即兑换现金（每日限1次）</button>
-
     <div class="welfare-wrap">
         <div class="title">日常福利</div>
         <div class="task-row">
@@ -609,44 +596,43 @@ button {
         </div>
         <div class="drag-wrap">
             <div class="drag-list">
-                <div class="red-packet" data-id="p1" data-index="1" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p1" data-index="1" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">40</div>
                     <div class="pending-text">待领取</div>
                 </div>
-                <div class="red-packet" data-id="p2" data-index="2" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p2" data-index="2" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">60</div>
                     <div class="pending-text">待领取</div>
                 </div>
-                <div class="red-packet" data-id="p3" data-index="3" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p3" data-index="3" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">60</div>
                     <div class="pending-text">待领取</div>
                 </div>
-                <div class="red-packet" data-id="p4" data-index="4" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p4" data-index="4" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">60</div>
                     <div class="pending-text">待领取</div>
                 </div>
-                <div class="red-packet" data-id="p5" data-index="5" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p5" data-index="5" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">60</div>
                     <div class="pending-text">待领取</div>
                 </div>
-                <div class="red-packet" data-id="p6" data-index="6" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p6" data-index="6" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">120</div>
                     <div class="pending-text">待领取</div>
                 </div>
-                <div class="red-packet" data-id="p7" data-index="7" data-video="7分钟.mp4">
+                <div class="red-packet" data-id="p7" data-index="7" data-video="5分钟视频.mp4">
                     <div class="coin-icon"></div>
                     <div class="packet-num">126</div>
                     <div class="pending-text">待领取</div>
                 </div>
             </div>
         </div>
-
         <div class="coupon-wrap">
             <div class="coupon">
                 <div class="price">
@@ -667,7 +653,6 @@ button {
         </div>
     </div>
 </div>
-
   <div class="btn-wrap">
         <a href="图片页面.html" target="_blank">
         <button class="buy-btn">点击跳转图片区</button>
@@ -678,7 +663,6 @@ button {
     <p>优惠券当日有效，次日自动失效，优惠券可在图片区抵扣消费</p>
 </div>
   
-
 <div class="modal-overlay" id="modal">
     <div class="modal-card">
         <div class="modal-icon"></div>
@@ -688,7 +672,6 @@ button {
         <button id="closeBtn" class="modal-close">关闭</button>
     </div>
 </div>
-
 <div class="video-modal" id="videoModal">
     <div class="top-bar">
         <div class="top-left">
@@ -701,7 +684,8 @@ button {
         </div>
     </div>
     <div class="video-container">
-        <video id="adVideo" autoplay muted playsinline loop>
+        <!-- 已移除 muted 属性，广告视频默认有声🔊 -->
+        <video id="adVideo" autoplay playsinline loop>
             <source type="video/mp4">
             您的浏览器不支持HTML5视频
         </video>
@@ -726,7 +710,6 @@ button {
         <button class="download-btn" id="downloadBtn">立即下载</button>
     </div>
 </div>
-
 <script>
 const CONFIG = {
     EXCHANGE_RATE: 50000,
@@ -734,7 +717,6 @@ const CONFIG = {
     LIMIT_COIN: 10000,
     WATCH_SECONDS: 30
 };
-
 const LEVEL_CONFIG = [
     { index: 1, targetMin: 1 },
     { index: 2, targetMin: 4 },
@@ -744,7 +726,6 @@ const LEVEL_CONFIG = [
     { index: 6, targetMin: 36 },
     { index: 7, targetMin: 46 }
 ];
-
 const Storage = {
     getToday(){
         const d = new Date();
@@ -796,7 +777,6 @@ const Storage = {
     }
 };
 const today = Storage.getToday();
-
 // 统一DOM容器，空值占位，页面加载后赋值
 const Dom = {
     coinText: null,
@@ -821,7 +801,6 @@ const Dom = {
     coupon1Btn: null,
     coupon20Btn: null
 };
-
 (function initReset(){
     let resetFlag = localStorage.getItem('packetResetDay') || '';
     if(resetFlag !== today){
@@ -832,19 +811,17 @@ const Dom = {
         Storage.setTimerPoint(Date.now());
     }
 })();
-
 // ========== 跨页音频控制标记 ==========
 function setAudioCmd(type){
     localStorage.setItem('audioControlCmd', type);
     localStorage.setItem('audioControlTime', Date.now().toString());
 }
-
 function doGetRewardAndJump(){
     Dom.adVideo.pause();
     if(videoTimer) clearInterval(videoTimer);
     if(remainTime > 0){
         Dom.videoModal.classList.remove('show');
-        setAudioCmd('play');
+        setAudioCmd('play'); //广告关闭恢复背景音乐
         return;
     }
     if(currentPacket){
@@ -857,10 +834,9 @@ function doGetRewardAndJump(){
         updateView();
     }
     Dom.videoModal.classList.remove('show');
-    setAudioCmd('play');
+    setAudioCmd('play'); //广告关闭恢复背景音乐
     window.location.href = "金币页.html";
 }
-
 function updateView(){
     // 页面未渲染完成直接跳过，不执行渲染逻辑
     if(!Dom.coinText) return;
@@ -873,7 +849,6 @@ function updateView(){
     Dom.dayTip.textContent = Storage.hasExchangedToday()
         ? "✅ 今日已兑换，明天 0 点后可再次兑换"
         : "每日仅限兑换1次，0点自动重置";
-
     Dom.packets.forEach(p=>{
         let st = Storage.getPacketState(p.dataset.id);
         p.className = 'red-packet';
@@ -882,16 +857,13 @@ function updateView(){
     // 更新金额同步刷新优惠券
     initCouponStatus();
 }
-
 function calcTotalMinute() {
     const isPlay = Storage.isCircleRunning();
     const checkPoint = Storage.getTimerPoint();
     let total = Storage.getTotalMin();
-
     if (!isPlay || checkPoint === 0) {
         return total;
     }
-
     const now = Date.now();
     const addMin = (now - checkPoint) / 1000 / 60;
     total += addMin;
@@ -899,18 +871,15 @@ function calcTotalMinute() {
     Storage.setTotalMin(total);
     return total;
 }
-
 function checkPacketLevel() {
     const totalMin = calcTotalMinute();
     const coinFull = Storage.coinFullToday();
     if (coinFull) return;
-
     LEVEL_CONFIG.forEach(level => {
         Dom.packets.forEach(pkt => {
             const idx = parseInt(pkt.dataset.index);
             const pid = pkt.dataset.id;
             const state = Storage.getPacketState(pid);
-
             if (state === 'received') return;
             if (idx === level.index && totalMin >= level.targetMin) {
                 Storage.setPacketState(pid, 'pending');
@@ -919,25 +888,20 @@ function checkPacketLevel() {
     });
     updateView();
 }
-
 let lastTick = Date.now();
 let hiddenStart = 0;
-
 function loopCheck() {
     const now = Date.now();
     const delta = (now - lastTick) / 1000 / 60;
     lastTick = now;
-
     if (Storage.isCircleRunning()) {
         let total = Storage.getTotalMin();
         total += delta;
         Storage.setTotalMin(total);
     }
-
     checkPacketLevel();
     setTimeout(loopCheck, 500);
 }
-
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         hiddenStart = Date.now();
@@ -951,7 +915,6 @@ document.addEventListener('visibilitychange', () => {
         hiddenStart = 0;
     }
 });
-
 function watchPlayStatus() {
     let lastStatus = null;
     setInterval(() => {
@@ -964,25 +927,21 @@ function watchPlayStatus() {
         }
     }, 500);
 }
-
 let startX = 0, startY = 0, currentX = 0, prevX = 0;
 function getMaxTranslate() {
     return -(Dom.dragList.scrollWidth - Dom.dragWrap.clientWidth);
 }
-
 // 优惠券状态更新函数
 const couponStorageKey = "couponExchangeDay";
 const todayStr = Storage.getToday();
 function initCouponStatus() {
     // 不存在优惠券按钮直接退出，杜绝报错
     if(!Dom.coupon1Btn || !Dom.coupon20Btn) return;
-
     let record = JSON.parse(localStorage.getItem(couponStorageKey) || "{}");
     if (record.date !== todayStr) {
         record = { date: todayStr, used: "" };
         localStorage.setItem(couponStorageKey, JSON.stringify(record));
     }
-
     const totalCash = Number(Storage.getTotalCash());
     if (record.used || totalCash < 1) {
         Dom.coupon1Btn.disabled = true;
@@ -995,7 +954,6 @@ function initCouponStatus() {
         Dom.coupon20Btn.disabled = false;
     }
 }
-
 // 页面全部加载完成后统一绑定DOM与事件
 window.addEventListener('load',()=>{
     // 1. 统一赋值所有DOM元素
@@ -1022,7 +980,6 @@ window.addEventListener('load',()=>{
     const couponBoxList = document.querySelectorAll(".coupon");
     Dom.coupon1Btn = couponBoxList[0].querySelector(".exchange-btn");
     Dom.coupon20Btn = couponBoxList[1].querySelector(".exchange-btn");
-
     // 2. 滑动事件绑定
     Dom.dragWrap.addEventListener('touchstart', e => {
         startX = e.touches[0].clientX;
@@ -1041,19 +998,17 @@ window.addEventListener('load',()=>{
     Dom.dragWrap.addEventListener('touchend', () => {
         prevX = currentX;
     });
-
     // 3. 红包点击事件
     Dom.packets.forEach(packet=>{
         packet.addEventListener('click',function(){
             if(!this.classList.contains('pending') || this.classList.contains('received')) return;
-            setAudioCmd('pause');
+            setAudioCmd('pause'); //点击待领取红包弹窗，暂停背景音乐
             currentPacket = this;
             currentGold = parseInt(this.querySelector('.packet-num').textContent);
             Dom.goldText.innerText = `${currentGold} 金币`;
             Dom.modal.classList.add('show');
         });
     });
-
     // 4. 弹窗按钮
     Dom.closeBtn.addEventListener('click', receiveSingle);
     Dom.doubleBtn.addEventListener('click', openAdPage);
@@ -1066,7 +1021,6 @@ window.addEventListener('load',()=>{
     Dom.downloadBtn.addEventListener('click',()=>{
         alert('触发下载/跳转应用商店');
     });
-
     // 5. 金币兑换按钮
     Dom.exchangeBtn.addEventListener('click', function(){
         const coin = Storage.getCoin();
@@ -1081,7 +1035,6 @@ window.addEventListener('load',()=>{
         updateView();
         alert(`兑换成功！\n兑换比例：50000金币 = 1元\n本次兑换 ${exchangeMoney.toFixed(2)} 元`);
     });
-
     // 6. 优惠券点击事件（页面加载完再绑定，保证按钮存在）
     Dom.coupon1Btn.addEventListener("click", function () {
         let record = JSON.parse(localStorage.getItem(couponStorageKey));
@@ -1113,7 +1066,6 @@ window.addEventListener('load',()=>{
         updateView();
         alert("已扣除 20 元");
     });
-
     // 7. 初始化逻辑
     if(Storage.getTimerPoint() === 0){
         Storage.setTimerPoint(Date.now());
@@ -1123,13 +1075,11 @@ window.addEventListener('load',()=>{
     watchPlayStatus();
     loopCheck();
 });
-
 // 全局变量
 let currentPacket = null;
 let currentGold = 0;
 let remainTime = CONFIG.WATCH_SECONDS;
 let videoTimer = null;
-
 function receiveSingle(){
     Dom.modal.classList.remove('show');
     if(!currentPacket) return;
@@ -1139,12 +1089,12 @@ function receiveSingle(){
     Storage.setPacketState(currentPacket.dataset.id,'received');
     currentPacket = null;
     updateView();
-    setAudioCmd('play');
+    // 【重点】红包弹窗关闭领取单份奖励，**不恢复背景音乐**，删除 setAudioCmd('play')
 }
-
 function openAdPage(e){
     e.preventDefault();
     Dom.modal.classList.remove('show');
+    setAudioCmd('pause'); //打开广告前暂停背景音乐
     remainTime = CONFIG.WATCH_SECONDS;
     Dom.countdownEl.innerText = `${remainTime}秒后可领奖励`;
     if(currentPacket){
@@ -1163,7 +1113,6 @@ function openAdPage(e){
         }
     },1000);
 }
-
 // 全局禁止缩放
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
@@ -1183,10 +1132,8 @@ window.visualViewport?.addEventListener('resize', () => {
     vp.content = "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no";
   }
 });
-
 // 1. 禁用右键菜单
 document.addEventListener('contextmenu', e => e.preventDefault());
-
 // 2. 禁用F12、Ctrl+U、Ctrl+Shift+I/C/J 开发者快捷键
 document.addEventListener('keydown', e => {
   const key = e.key.toLowerCase();
@@ -1199,7 +1146,6 @@ document.addEventListener('keydown', e => {
   // Ctrl+S 保存页面
   if (e.ctrlKey && key === 's') e.preventDefault();
 });
-
 // 3. 检测打开控制台窗口，弹窗刷新页面（进阶防护）
 let devToolsOpen = false;
 const checkDevTool = () => {
@@ -1217,10 +1163,8 @@ const checkDevTool = () => {
   }
 };
 setInterval(checkDevTool, 800);
-
 // 4. 禁止拖拽复制文字/图片
 document.addEventListener('dragstart', e => e.preventDefault());
-
 // 下面粘贴这段拦截保存代码
 // 拦截Ctrl+S保存页面
 document.addEventListener('keydown',e=>{
